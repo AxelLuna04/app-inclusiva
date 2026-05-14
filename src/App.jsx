@@ -1,75 +1,99 @@
 import { useState } from 'react'
+import { CATEGORIAS_PRINCIPALES, ICONOS_UI } from './data/datosApp'
+import VistaSalud from './vistas/VistaSalud';
+import BotonItem from './components/BotonItem'
 
-function App() {
-  // Aquí guardaremos los iconos que el usuario vaya seleccionando
-  const [mensaje, setMensaje] = useState([])
+export default function App() {
+  const [vistaActual, setVistaActual] = useState('inicio');
+  const [mensaje, setMensaje] = useState([]);
+  const [hablando, setHablando] = useState(false);
 
-  // Función para agregar un item al panel superior
-  const agregarAlMensaje = (item) => {
-    setMensaje([...mensaje, item])
-  }
+  const agregarItem = (item) => setMensaje([...mensaje, item]);
+  const borrarUltimo = () => setMensaje(mensaje.slice(0, -1));
+  const borrarTodo = () => setMensaje([]);
 
-  // Función para limpiar el mensaje
-  const limpiarMensaje = () => {
-    setMensaje([])
-  }
+  const reproducirMensaje = () => {
+    if (mensaje.length === 0) return;
+    setHablando(true);
+    const textoCompleto = mensaje.map(item => item.texto).join(', ');
+    const utterance = new SpeechSynthesisUtterance(textoCompleto);
+    utterance.lang = 'es-MX';
+    utterance.rate = 0.9;
+    utterance.onend = () => {
+      setHablando(false);
+      setMensaje([]);
+    };
+    window.speechSynthesis.speak(utterance);
+  };
 
   return (
-    <div className="flex flex-col h-screen bg-gray-100 p-4">
+    <div className="flex flex-col h-screen bg-gray-100 p-4 relative">
       
-      {/* 1. PANEL SUPERIOR (El cuadro donde se arma el mensaje) */}
-      <div className="h-1/3 w-full bg-white border-2 border-gray-400 rounded-lg shadow-sm p-4 flex flex-col justify-between mb-4">
-        <div className="flex flex-wrap gap-2">
-          {mensaje.length === 0 ? (
-            <p className="text-gray-400">Selecciona categorías abajo para armar tu mensaje...</p>
-          ) : (
-            mensaje.map((item, index) => (
-              <div key={index} className="bg-blue-100 px-3 py-2 rounded-md font-semibold text-blue-800">
-                {item}
-              </div>
-            ))
-          )}
+      {hablando && (
+        <div className="absolute inset-0 bg-black/80 z-50 flex items-center justify-center">
+          <img 
+            src={ICONOS_UI.hablando} 
+            alt="Hablando" 
+            className="w-64 h-64 object-contain animate-pulse"
+            onError={(e) => { e.target.src = 'https://via.placeholder.com/200?text=🗣️' }}
+          />
+        </div>
+      )}
+
+      <div className="h-1/3 w-full bg-white border-4 border-gray-300 rounded-2xl shadow-sm p-4 flex flex-col justify-between mb-4">
+        <div className="flex flex-wrap gap-3 overflow-y-auto">
+          {mensaje.map((item, index) => (
+            <div key={index} className="bg-blue-50 p-2 rounded-2xl border-2 border-blue-200 shadow-sm">
+              <img src={item.imagen} alt="" className="w-16 h-16 object-contain" 
+                   onError={(e) => { e.target.src = 'https://via.placeholder.com/50' }}/>
+            </div>
+          ))}
         </div>
         
-        {/* Controles del panel superior */}
-        <div className="flex justify-end gap-2 mt-2">
-          <button 
-            onClick={limpiarMensaje}
-            className="bg-red-500 text-white px-4 py-2 rounded-lg font-bold shadow-md hover:bg-red-600">
-            Borrar Todo
-          </button>
-          <button 
-            className="bg-green-500 text-white px-4 py-2 rounded-lg font-bold shadow-md hover:bg-green-600">
-            Reproducir Mensaje 🔊
-          </button>
-        </div>
-      </div>
+        <div className="flex justify-between items-end mt-2">
+          <div className="flex gap-4">
+            
+            <button onClick={borrarUltimo} disabled={mensaje.length === 0} className="bg-yellow-400 p-4 rounded-xl shadow-md hover:bg-yellow-500 disabled:opacity-30 transition-transform active:scale-95">
+              <img src={ICONOS_UI.borrar} alt="Borrar último" className="w-10 h-10 object-contain" onError={(e) => { e.target.src = 'https://via.placeholder.com/40?text=<-' }}/>
+            </button>
+            
+            <button onClick={borrarTodo} disabled={mensaje.length === 0} className="bg-red-500 p-4 rounded-xl shadow-md hover:bg-red-600 disabled:opacity-30 transition-transform active:scale-95">
+               <img src={ICONOS_UI.eliminar} alt="Borrar todo" className="w-10 h-10 object-contain" onError={(e) => { e.target.src = 'https://via.placeholder.com/40?text=X' }}/>
+            </button>
 
-      {/* 2. PANEL INFERIOR (Categorías principales) */}
-      <div className="h-2/3 w-full flex justify-center items-start pt-4">
-        <div className="grid grid-cols-2 gap-6 w-full max-w-md">
+          </div>
           
-          {/* Botón Comida */}
-          <button 
-            onClick={() => agregarAlMensaje('Comida 🍔')}
-            className="flex flex-col items-center justify-center bg-white border-2 border-blue-300 rounded-xl p-4 shadow-sm hover:bg-blue-50 transition-colors aspect-square">
-            <span className="text-6xl mb-2">🍔</span>
-            <span className="font-bold text-gray-700">Comida</span>
-          </button>
-
-          {/* Botón Bebidas */}
-          <button 
-            onClick={() => agregarAlMensaje('Bebidas 🥤')}
-            className="flex flex-col items-center justify-center bg-white border-2 border-blue-300 rounded-xl p-4 shadow-sm hover:bg-blue-50 transition-colors aspect-square">
-            <span className="text-6xl mb-2">🥤</span>
-            <span className="font-bold text-gray-700">Bebidas</span>
+          <button onClick={reproducirMensaje} disabled={mensaje.length === 0} className="bg-green-500 p-6 rounded-2xl shadow-lg hover:bg-green-600 disabled:opacity-30 animate-bounce transition-transform active:scale-95">
+             <img src={ICONOS_UI.reproducir} alt="Hablar" className="w-16 h-16 object-contain" onError={(e) => { e.target.src = 'https://via.placeholder.com/64?text=Play' }}/>
           </button>
 
         </div>
       </div>
 
+      <div className="h-2/3 w-full bg-white rounded-2xl p-4 shadow-sm overflow-y-auto border-4 border-gray-200">
+        
+        {vistaActual === 'inicio' && (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {CATEGORIAS_PRINCIPALES.map((cat) => (
+              <BotonItem 
+                key={cat.id} 
+                imagen={cat.imagen} 
+                texto={cat.texto}
+                colorBorde="border-blue-300 hover:border-blue-500 hover:bg-blue-50"
+                alHacerClic={() => setVistaActual(cat.id)}
+              />
+            ))}
+          </div>
+        )}
+
+        {vistaActual === 'salud' && (
+          <VistaSalud 
+            alVolver={() => setVistaActual('inicio')} 
+            alAgregar={agregarItem} 
+          />
+        )}
+
+      </div>
     </div>
   )
 }
-
-export default App
