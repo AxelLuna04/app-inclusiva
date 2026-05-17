@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { CATEGORIAS_PRINCIPALES, ICONOS_UI } from './data/datosApp'
 import VistaSalud from './vistas/VistaSalud';
+import VistaEmociones from './vistas/VistaEmociones';
 import BotonItem from './components/BotonItem'
 
 export default function App() {
@@ -88,6 +89,13 @@ export default function App() {
 
         {vistaActual === 'salud' && (
           <VistaSalud 
+            alVolver={() => setVistaActual('inicio')} 
+            alAgregar={agregarItem} 
+          />
+        )}
+
+        {vistaActual === 'emociones' && (
+          <VistaEmociones 
             alVolver={() => setVistaActual('inicio')} 
             alAgregar={agregarItem} 
           />
