@@ -5,13 +5,20 @@ import VistaEmociones from './vistas/VistaEmociones';
 import VistaUrgencias from './vistas/VistaUrgencias';
 import VistaTiempo from './vistas/VistaTiempo';
 import BotonItem from './components/BotonItem'
+import VistaComida from './vistas/VistaComida';
 
 export default function App() {
   const [vistaActual, setVistaActual] = useState('inicio');
   const [mensaje, setMensaje] = useState([]);
   const [hablando, setHablando] = useState(false);
 
-  const agregarItem = (item) => setMensaje([...mensaje, item]);
+  const agregarItem = (elementos) => {
+    if (Array.isArray(elementos)) {
+      setMensaje([...mensaje, ...elementos]);
+    } else {
+      setMensaje([...mensaje, elementos]);
+    }
+  };
   const borrarUltimo = () => setMensaje(mensaje.slice(0, -1));
   const borrarTodo = () => setMensaje([]);
 
@@ -116,6 +123,13 @@ export default function App() {
 
         {vistaActual === 'tiempo' && (
           <VistaTiempo 
+            alVolver={() => setVistaActual('inicio')} 
+            alAgregar={agregarItem} 
+          />
+        )}
+
+        {vistaActual === 'comidaChatarra' && (
+          <VistaComida 
             alVolver={() => setVistaActual('inicio')} 
             alAgregar={agregarItem} 
           />
