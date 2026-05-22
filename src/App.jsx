@@ -3,6 +3,7 @@ import { CATEGORIAS_PRINCIPALES, ICONOS_UI } from './data/datosApp'
 import VistaSalud from './vistas/VistaSalud';
 import VistaEmociones from './vistas/VistaEmociones';
 import VistaUrgencias from './vistas/VistaUrgencias';
+import VistaTiempo from './vistas/VistaTiempo';
 import BotonItem from './components/BotonItem'
 
 export default function App() {
@@ -65,8 +66,12 @@ export default function App() {
 
           </div>
           
-          <button onClick={reproducirMensaje} disabled={mensaje.length === 0} className="bg-green-500 p-6 rounded-2xl shadow-lg hover:bg-green-600 disabled:opacity-30 animate-bounce transition-transform active:scale-95">
-             <img src={ICONOS_UI.reproducir} alt="Hablar" className="w-16 h-16 object-contain" onError={(e) => { e.target.src = 'https://via.placeholder.com/64?text=Play' }}/>
+          <button 
+            onClick={reproducirMensaje} 
+            disabled={mensaje.length === 0} 
+            className={`bg-green-500 p-6 rounded-2xl shadow-lg hover:bg-green-600 disabled:opacity-30 transition-transform active:scale-95 ${mensaje.length > 0 ? 'animate-bounce' : ''}`}
+          >
+            <img src={ICONOS_UI.reproducir} alt="Hablar" className="w-16 h-16 object-contain" onError={(e) => { e.target.src = 'https://via.placeholder.com/64?text=Play' }}/>
           </button>
 
         </div>
@@ -104,6 +109,13 @@ export default function App() {
 
         {vistaActual === 'urgencias' && (
           <VistaUrgencias 
+            alVolver={() => setVistaActual('inicio')} 
+            alAgregar={agregarItem} 
+          />
+        )}
+
+        {vistaActual === 'tiempo' && (
+          <VistaTiempo 
             alVolver={() => setVistaActual('inicio')} 
             alAgregar={agregarItem} 
           />

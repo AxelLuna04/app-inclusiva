@@ -8,7 +8,10 @@ export default function BotonItem({ imagen, texto, colorBorde, alHacerClic }) {
         src={imagen} 
         alt={texto}
         className="w-full h-full object-contain rounded-lg"
-        onError={(e) => { e.target.src = 'https://via.placeholder.com/150?text=Falta+Imagen' }}
+        onError={(e) => { 
+          e.currentTarget.onerror = null;
+          e.currentTarget.src = 'https://via.placeholder.com/150?text=Falta+Imagen';
+        }}
       />
     </button>
   );

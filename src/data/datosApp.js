@@ -7,6 +7,7 @@ export const CATEGORIAS_PRINCIPALES = [
   { id: 'emociones', imagen: `${base}imagenes/categorias/emociones.jpeg`, texto: 'Emociones' },
   //{ id: 'comidaChatarra', imagen: `${base}imagenes/categorias/comidaChatarra.png`, texto: 'Comida' },
   //{ id: 'bebidas', imagen: `${base}imagenes/categorias/bebidas.png`, texto: 'Bebidas' },
+  { id: 'tiempo', imagen: `${base}imagenes/categorias/tiempo.png`, texto: 'Tiempo' },
 ];
 
 //Aqui ponemos los iconos generales de la app
@@ -34,8 +35,15 @@ export const DATOS_EMOCIONES = [
 
 //Iconos de la categoria urgencias
 export const DATOS_URGENCIAS = [
-  { id: 'inodoro', imagen: `${base}imagenes/urgencias/inodoro.png`, texto: '¿Dónde está el baño, por favor?' },
-  { id: 'permiso', imagen: `${base}imagenes/urgencias/permiso.png`, texto: 'Me da permiso, por favor' },
+  { id: 'inodoro', imagen: `${base}imagenes/urgencias/inodoro.png`, texto: '¿Dónde está el baño?' },
+  { id: 'permiso', imagen: `${base}imagenes/urgencias/permiso.png`, texto: 'Me da permiso' },
+  { id: 'ayuda', imagen: `${base}imagenes/urgencias/ayuda.png`, texto: '¡Ayuda!' },
 ];
 
-
+//Iconos de la categoria tiempo
+export const DATOS_TIEMPO = [
+  { id: 'manana', imagen: `${base}imagenes/tiempo/manana.png`, texto: 'En la mañana' },
+  { id: 'tarde', imagen: `${base}imagenes/tiempo/tarde.png`, texto: 'En la tarde' },
+  { id: 'noche', imagen: `${base}imagenes/tiempo/noche.png`, texto: 'En la noche' },
+  { id: 'madrugada', imagen: `${base}imagenes/tiempo/madrugada.png`, texto: 'En la madrugada' },
+];
