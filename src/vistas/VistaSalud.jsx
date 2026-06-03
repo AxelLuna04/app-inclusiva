@@ -1,32 +1,8 @@
 import BotonItem from '../components/BotonItem';
-import { DATOS_SALUD, CATEGORIAS_PRINCIPALES, ICONOS_UI } from '../data/datosApp';
+import { DATOS_SALUD } from '../data/datosApp';
 
-export default function VistaSalud({ alVolver, alAgregar }) {
-  
-  const infoCategoria = CATEGORIAS_PRINCIPALES.find(cat => cat.id === 'salud');
-
+export default function VistaSalud({ alAgregar }) {
   return (
-    <div>
-      <div className="flex items-center gap-6 mb-6 pb-4 border-b">
-        <button 
-          onClick={alVolver} 
-          className="bg-gray-200 p-4 rounded-xl hover:bg-gray-300 shadow-sm transition-transform active:scale-95">
-          <img 
-            src={ICONOS_UI.volver} 
-            alt="Volver" 
-            className="w-12 h-12 object-contain"
-            onError={(e) => { e.target.src = 'https://via.placeholder.com/50?text=<-' }}
-          />
-        </button>
-        
-        <img 
-          src={infoCategoria.imagen} 
-          alt="Categoría Salud" 
-          className="w-20 h-20 object-contain"
-          onError={(e) => { e.target.src = 'https://via.placeholder.com/80?text=Falta' }}
-        />
-      </div>
-      
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {DATOS_SALUD.map((item) => (
           <BotonItem 
@@ -38,6 +14,5 @@ export default function VistaSalud({ alVolver, alAgregar }) {
           />
         ))}
       </div>
-    </div>
   );
 }

@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import BotonItem from '../components/BotonItem';
-import { DATOS_COMIDA, INGREDIENTES, EXTRAS_PEDIDO, CATEGORIAS_PRINCIPALES, ICONOS_UI } from '../data/datosApp';
+import { DATOS_COMIDA, INGREDIENTES, EXTRAS_PEDIDO, ICONOS_UI } from '../data/datosApp';
 
-export default function VistaComida({ alVolver, alAgregar }) {
+export default function VistaComida({ alAgregar }) {
   const [itemBase, setItemBase] = useState(null);
   const [cantidad, setCantidad] = useState(1);
   
@@ -11,8 +11,6 @@ export default function VistaComida({ alVolver, alAgregar }) {
   const [extras, setExtras] = useState([]);
   
   const [modoSin, setModoSin] = useState(false);
-
-  const infoCategoria = CATEGORIAS_PRINCIPALES.find(cat => cat.id === 'comidaChatarra' || cat.id === 'comida');
 
   const manejarIngrediente = (ingrediente) => {
     if (modoSin) {
@@ -49,7 +47,7 @@ export default function VistaComida({ alVolver, alAgregar }) {
     });
 
     ingredientesCon.forEach(ing => {
-      secuencia.push({ ...ing, texto: `de ${ing.texto}` });
+      secuencia.push({ ...ing, texto: `con ${ing.texto}` });
     });
 
     ingredientesSin.forEach(ing => {
@@ -69,15 +67,7 @@ export default function VistaComida({ alVolver, alAgregar }) {
   };
 
   return (
-    <div className="h-full flex flex-col">
-      <div className="flex items-center gap-6 mb-4 pb-4 border-b shrink-0">
-        <button 
-          onClick={() => itemBase ? setItemBase(null) : alVolver()} 
-          className="bg-gray-200 p-4 rounded-xl hover:bg-gray-300 shadow-sm active:scale-95">
-          <img src={ICONOS_UI.volver} alt="" className="w-12 h-12 object-contain" />
-        </button>
-        <img src={infoCategoria?.imagen} alt="" className="w-20 h-20 object-contain" />
-      </div>
+    <div className="h-full flex flex-col pt-2">
       
       {!itemBase ? (
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 overflow-y-auto">
@@ -87,10 +77,30 @@ export default function VistaComida({ alVolver, alAgregar }) {
         </div>
       ) : (
         <div className="flex-1 overflow-y-auto pr-2 pb-6">
-          
-          <div className="flex items-center justify-between bg-orange-50 p-4 rounded-2xl border-4 border-orange-200 mb-6">
-            <img src={itemBase.imagen} alt="" className="w-20 h-20 md:w-24 md:h-24 object-contain bg-white rounded-xl shadow-sm p-2" />
+          <div className="relative flex items-center h-24 mb-6 pb-4 border-b-4 border-gray-100 w-full">
+            <button 
+              onClick={() => setItemBase(null)} 
+              className="bg-orange-100 p-4 rounded-xl hover:bg-orange-200 shadow-sm transition-transform active:scale-95 z-10"
+            >
+              <img 
+                src={ICONOS_UI.volver} 
+                alt="Volver" 
+                className="w-12 h-12 object-contain"
+                onError={(e) => { e.target.src = 'https://via.placeholder.com/50?text=<-' }}
+              />
+            </button>
             
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <img 
+                src={itemBase.imagen} 
+                alt={itemBase.texto} 
+                className="w-20 h-20 object-contain"
+                onError={(e) => { e.target.src = 'https://via.placeholder.com/80?text=Falta' }}
+              />
+            </div>
+          </div>
+
+          <div className="flex items-center justify-center bg-orange-50 p-4 rounded-2xl border-4 border-orange-200 mb-6">
             <div className="flex items-center gap-4 md:gap-6">
               <button onClick={() => setCantidad(Math.max(1, cantidad - 1))} className="bg-white border-4 border-gray-300 w-14 h-14 md:w-16 md:h-16 rounded-2xl text-4xl md:text-5xl font-bold shadow-sm active:scale-95 flex items-center justify-center pb-1">-</button>
               <span className="text-5xl md:text-6xl font-black text-orange-600 w-12 md:w-16 text-center">{cantidad}</span>

@@ -28,9 +28,9 @@ export const DATOS_SALUD = [
 
 //Iconos de la categoria emociones
 export const DATOS_EMOCIONES = [
-  //{ id: 'feliz', imagen: `${base}imagenes/emociones/feliz.jpeg`, texto: 'Me siento feliz' },
-  //{ id: 'triste', imagen: `${base}imagenes/emociones/triste.jpeg`, texto: 'Me siento triste' },
-  //{ id: 'enojado', imagen: `${base}imagenes/emociones/enojado.jpeg`, texto: 'Me siento enojado' },
+  { id: 'feliz', imagen: `${base}imagenes/emociones/feliz.jpeg`, texto: 'Feliz' },
+  { id: 'triste', imagen: `${base}imagenes/emociones/triste.jpeg`, texto: 'Triste' },
+  { id: 'enojado', imagen: `${base}imagenes/emociones/enojado.jpeg`, texto: 'Enojado' },
 ];
 
 //Iconos de la categoria urgencias
@@ -42,10 +42,10 @@ export const DATOS_URGENCIAS = [
 
 //Iconos de la categoria tiempo
 export const DATOS_TIEMPO = [
-  { id: 'manana', imagen: `${base}imagenes/tiempo/manana.png`, texto: 'En la mañana' },
-  { id: 'tarde', imagen: `${base}imagenes/tiempo/tarde.png`, texto: 'En la tarde' },
-  { id: 'noche', imagen: `${base}imagenes/tiempo/noche.png`, texto: 'En la noche' },
-  { id: 'madrugada', imagen: `${base}imagenes/tiempo/madrugada.png`, texto: 'En la madrugada' },
+  { id: 'manana', imagen: `${base}imagenes/tiempo/manana.webp`, texto: 'En la mañana' },
+  { id: 'tarde', imagen: `${base}imagenes/tiempo/tarde.webp`, texto: 'En la tarde' },
+  { id: 'noche', imagen: `${base}imagenes/tiempo/noche.webp`, texto: 'En la noche' },
+  { id: 'madrugada', imagen: `${base}imagenes/tiempo/madrugada.webp`, texto: 'En la madrugada' },
 ];
 export const DATOS_COMIDA = [
   { id: 'pizza_rebanada', imagen: `${base}imagenes/comida/pizza_rebanada.png`, texto: 'rebanada de pizza' },

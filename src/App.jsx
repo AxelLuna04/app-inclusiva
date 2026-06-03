@@ -4,19 +4,19 @@ import VistaSalud from './vistas/VistaSalud';
 import VistaEmociones from './vistas/VistaEmociones';
 import VistaUrgencias from './vistas/VistaUrgencias';
 import VistaTiempo from './vistas/VistaTiempo';
-import BotonItem from './components/BotonItem'
 import VistaComida from './vistas/VistaComida';
+import BotonItem from './components/BotonItem'
 
 export default function App() {
   const [vistaActual, setVistaActual] = useState('inicio');
   const [mensaje, setMensaje] = useState([]);
   const [hablando, setHablando] = useState(false);
 
-  const agregarItem = (elementos) => {
-    if (Array.isArray(elementos)) {
-      setMensaje([...mensaje, ...elementos]);
+  const agregarItem = (item) => {
+  if (Array.isArray(item)) {
+      setMensaje([...mensaje, ...item]);
     } else {
-      setMensaje([...mensaje, elementos]);
+      setMensaje([...mensaje, item]);
     }
   };
   const borrarUltimo = () => setMensaje(mensaje.slice(0, -1));
@@ -31,13 +31,14 @@ export default function App() {
     utterance.rate = 0.9;
     utterance.onend = () => {
       setHablando(false);
-      setMensaje([]);
     };
     window.speechSynthesis.speak(utterance);
   };
 
+  const infoCategoriaActual = CATEGORIAS_PRINCIPALES.find(cat => cat.id === vistaActual);
+
   return (
-    <div className="flex flex-col h-screen bg-gray-100 p-4 relative">
+    <div className="flex flex-col h-screen bg-gray-100 p-4 relative overflow-hidden">
       
       {hablando && (
         <div className="absolute inset-0 bg-black/80 z-50 flex items-center justify-center">
@@ -50,7 +51,32 @@ export default function App() {
         </div>
       )}
 
-      <div className="h-1/3 w-full bg-white border-4 border-gray-300 rounded-2xl shadow-sm p-4 flex flex-col justify-between mb-4">
+      {vistaActual !== 'inicio' && infoCategoriaActual && (
+        <div className="h-24 w-full bg-white rounded-2xl p-4 flex items-center relative border-4 border-gray-200 shadow-sm mb-4 flex-none">
+          <button 
+            onClick={() => setVistaActual('inicio')} 
+            className="bg-gray-200 p-4 rounded-xl hover:bg-gray-300 shadow-sm transition-transform active:scale-95 z-10"
+          >
+            <img 
+              src={ICONOS_UI.volver} 
+              alt="Volver" 
+              className="w-12 h-12 object-contain"
+              onError={(e) => { e.target.src = 'https://via.placeholder.com/50?text=<-' }}
+            />
+          </button>
+          
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <img 
+              src={infoCategoriaActual.imagen} 
+              alt={`Categoría ${infoCategoriaActual.texto}`} 
+              className="w-20 h-20 object-contain" 
+              onError={(e) => { e.target.src = 'https://via.placeholder.com/80?text=Falta' }}
+            />
+          </div>
+        </div>
+      )}
+
+      <div className="h-1/3 w-full bg-white border-4 border-gray-300 rounded-2xl shadow-sm p-4 flex flex-col justify-between mb-4 flex-none">
         <div className="flex flex-wrap gap-3 overflow-y-auto">
           {mensaje.map((item, index) => (
             <div key={index} className="bg-blue-50 p-2 rounded-2xl border-2 border-blue-200 shadow-sm">
@@ -62,7 +88,6 @@ export default function App() {
         
         <div className="flex justify-between items-end mt-2">
           <div className="flex gap-4">
-            
             <button onClick={borrarUltimo} disabled={mensaje.length === 0} className="bg-yellow-400 p-4 rounded-xl shadow-md hover:bg-yellow-500 disabled:opacity-30 transition-transform active:scale-95">
               <img src={ICONOS_UI.borrar} alt="Borrar último" className="w-10 h-10 object-contain" onError={(e) => { e.target.src = 'https://via.placeholder.com/40?text=<-' }}/>
             </button>
@@ -70,7 +95,6 @@ export default function App() {
             <button onClick={borrarTodo} disabled={mensaje.length === 0} className="bg-red-500 p-4 rounded-xl shadow-md hover:bg-red-600 disabled:opacity-30 transition-transform active:scale-95">
                <img src={ICONOS_UI.eliminar} alt="Borrar todo" className="w-10 h-10 object-contain" onError={(e) => { e.target.src = 'https://via.placeholder.com/40?text=X' }}/>
             </button>
-
           </div>
           
           <button 
@@ -78,13 +102,12 @@ export default function App() {
             disabled={mensaje.length === 0} 
             className={`bg-green-500 p-6 rounded-2xl shadow-lg hover:bg-green-600 disabled:opacity-30 transition-transform active:scale-95 ${mensaje.length > 0 ? 'animate-bounce' : ''}`}
           >
-            <img src={ICONOS_UI.reproducir} alt="Hablar" className="w-16 h-16 object-contain" onError={(e) => { e.target.src = 'https://via.placeholder.com/64?text=Play' }}/>
+             <img src={ICONOS_UI.reproducir} alt="Hablar" className="w-16 h-16 object-contain" onError={(e) => { e.target.src = 'https://via.placeholder.com/64?text=Play' }}/>
           </button>
-
         </div>
       </div>
 
-      <div className="h-2/3 w-full bg-white rounded-2xl p-4 shadow-sm overflow-y-auto border-4 border-gray-200">
+      <div className="flex-1 w-full bg-white rounded-2xl p-4 shadow-sm overflow-y-auto border-4 border-gray-200">
         
         {vistaActual === 'inicio' && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -101,38 +124,23 @@ export default function App() {
         )}
 
         {vistaActual === 'salud' && (
-          <VistaSalud 
-            alVolver={() => setVistaActual('inicio')} 
-            alAgregar={agregarItem} 
-          />
+          <VistaSalud alAgregar={agregarItem} />
         )}
 
         {vistaActual === 'emociones' && (
-          <VistaEmociones 
-            alVolver={() => setVistaActual('inicio')} 
-            alAgregar={agregarItem} 
-          />
+          <VistaEmociones alAgregar={agregarItem} />
         )}
 
         {vistaActual === 'urgencias' && (
-          <VistaUrgencias 
-            alVolver={() => setVistaActual('inicio')} 
-            alAgregar={agregarItem} 
-          />
-        )}
-
-        {vistaActual === 'tiempo' && (
-          <VistaTiempo 
-            alVolver={() => setVistaActual('inicio')} 
-            alAgregar={agregarItem} 
-          />
+          <VistaUrgencias alAgregar={agregarItem} />
         )}
 
         {vistaActual === 'comidaChatarra' && (
-          <VistaComida 
-            alVolver={() => setVistaActual('inicio')} 
-            alAgregar={agregarItem} 
-          />
+          <VistaComida alAgregar={agregarItem} />
+        )}
+
+        {vistaActual === 'tiempo' && (
+          <VistaTiempo alAgregar={agregarItem} />
         )}
 
       </div>
