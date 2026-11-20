@@ -1,10 +1,22 @@
 import { useState } from 'react'
-import { CATEGORIAS_PRINCIPALES, ICONOS_UI } from './data/datosApp'
-import VistaSalud from './vistas/VistaSalud';
-import VistaEmociones from './vistas/VistaEmociones';
-import VistaUrgencias from './vistas/VistaUrgencias';
-import VistaTiempo from './vistas/VistaTiempo';
+import {
+  CATEGORIAS_PRINCIPALES,
+  ICONOS_UI,
+  DATOS_SALUD,
+  DATOS_EMOCIONES,
+  DATOS_URGENCIAS,
+  DATOS_TIEMPO,
+} from './data/datosApp'
+import VistaCategoria from './vistas/VistaCategoria';
 import VistaComida from './vistas/VistaComida';
+
+// Pictogramas y color de borde de cada categoría simple
+const CATEGORIAS_SIMPLES = {
+  salud: { items: DATOS_SALUD, colorBorde: 'border-red-300 hover:border-red-500 hover:bg-red-50' },
+  emociones: { items: DATOS_EMOCIONES, colorBorde: 'border-red-300 hover:border-red-500 hover:bg-red-50' },
+  urgencias: { items: DATOS_URGENCIAS, colorBorde: 'border-red-300 hover:border-red-500 hover:bg-red-50' },
+  tiempo: { items: DATOS_TIEMPO, colorBorde: 'border-purple-300 hover:border-purple-500 hover:bg-purple-50' },
+};
 import BotonItem from './components/BotonItem'
 
 export default function App() {
@@ -123,24 +135,16 @@ export default function App() {
           </div>
         )}
 
-        {vistaActual === 'salud' && (
-          <VistaSalud alAgregar={agregarItem} />
-        )}
-
-        {vistaActual === 'emociones' && (
-          <VistaEmociones alAgregar={agregarItem} />
-        )}
-
-        {vistaActual === 'urgencias' && (
-          <VistaUrgencias alAgregar={agregarItem} />
+        {CATEGORIAS_SIMPLES[vistaActual] && (
+          <VistaCategoria
+            items={CATEGORIAS_SIMPLES[vistaActual].items}
+            colorBorde={CATEGORIAS_SIMPLES[vistaActual].colorBorde}
+            alAgregar={agregarItem}
+          />
         )}
 
         {vistaActual === 'comidaChatarra' && (
           <VistaComida alAgregar={agregarItem} />
-        )}
-
-        {vistaActual === 'tiempo' && (
-          <VistaTiempo alAgregar={agregarItem} />
         )}
 
       </div>
